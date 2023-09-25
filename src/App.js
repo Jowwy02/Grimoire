@@ -63,7 +63,7 @@ function App() {
     // setInput(option)
     setIsThinking(true);
     setMessages([...messages, { role: "user", content: option }]);
-    callOpenaiAPI([...messages, messages]);
+    callOpenaiAPI([...messages, PROMPT]);
   };
 
   const preloadSVG = (
