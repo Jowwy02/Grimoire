@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+  font-family: open Sans;
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration-color: black;
+}
+
 .vertical-line {
   position: absolute;
   background-color: #e9ecef;
@@ -9,7 +16,16 @@
   width: 100%;
 }
 
+.options{
+  margin-top: 70px;
+ margin-left: 470px;
+}
+.options p {
+  margin-left: 300px;
+}
+
 .options-btn {
+  display: inline-flex;
   background-color: #dbdfe6;
   margin: 6px;
   padding: 6px;

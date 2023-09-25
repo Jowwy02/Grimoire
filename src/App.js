@@ -5,9 +5,15 @@ import CommentInfo from "./assets/CommentInfo.svg";
 import Logo from "./assets/Logo .svg";
 
 const openai = new OpenAI({
-  apiKey: "process.env.REACT_APP_OPENAI_KEY",
+  apiKey: process.env.REACT_APP_OPENAI_KEY,
   dangerouslyAllowBrowser: true,
 });
+
+const PROMPT = {
+  role: "system",
+  content:
+    "Create a short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the users input. The story should be structured into chapters. The chapters title should be bolded. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner.",
+};
 
 function App() {
   const [input, setInput] = useState("");
@@ -17,14 +23,17 @@ function App() {
   const messagesEndRef = useRef(null);
 
   console.log(messages);
-  const callOpenaiAPI = async () => {
-    setMessages([...messages, { role: "system", content: input }]);
+
+  const callOpenaiAPI = async (chat) => {
+    // setMessages([...messages, { role: "system", content: input }]);
     setInput("");
+    console.log("chat", chat);
+    console.log("messages", messages);
     try {
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo-0613",
-        messages: [{ role: "system", content: input }],
-        max_tokens: 500,
+        messages: chat,
+        max_tokens: 200,
         temperature: 0,
       });
 
@@ -43,9 +52,18 @@ function App() {
 
   const onSubmitAction = () => {
     if (!input) return;
+    console.log("input", input);
     setIsThinking(true);
     setMessages([...messages, { role: "user", content: input }]);
-    callOpenaiAPI();
+    console.log("messages", messages);
+    callOpenaiAPI([...messages, PROMPT]);
+  };
+
+  const selectOption = (option) => {
+    // setInput(option)
+    setIsThinking(true);
+    setMessages([...messages, { role: "user", content: option }]);
+    callOpenaiAPI([...messages, messages]);
   };
 
   const preloadSVG = (
@@ -93,21 +111,22 @@ function App() {
       <div className="vertical-line"></div>
       <div className="body mt-8 ml-40 pr-56">
         <h1 className="font-bold text-2xl ">Welcome to your Grimoire,</h1>
-        <h6>Embark on an adaventure of your choice...</h6>
+        <h6>Embark on an adventure of your choice...</h6>
       </div>
 
-      <div className="relative max-w-3xl space-y-5 mx-auto  my-5 min-h-[cal(100vh_-_150px)] pb-[170px]">
+      <div className="relative mr-40 ml-44 space mx-auto my-5 min-h-[cal(100vh_-_150px)] pb-[170px]">
         {messages.map((messages, i) => (
           <div
             ref={messagesEndRef}
             key={i}
-            className={`m-3 relative left-1/4 p-3 max-w-3x rounded-lg  w-3/5 overflow-y-auto whitespace-normal text-white my-2  ${
+            className={`  m-3 relative  p-3 max-w-3x rounded-lg  w-3/5 overflow-y-auto whitespace-normal text-black my-2  ${
               messages.role !== "assistant"
-                ? "bg-gray-300 text-black "
-                : "bg-purple-500 ml-auto"
+                ? "bg-gray-300 "
+                : "bg-purple-200 ml-auto"
             }`}
+            dangerouslySetInnerHTML={{ __html: messages.content || "" }}
           >
-            {messages.content}
+            {/* {messages.content} */}
           </div>
         ))}
         {isThinking && (
@@ -152,15 +171,33 @@ function App() {
           </p>
 
           <div className="options ">
-            <p className="flex justify-end font-semibold py-4 mx-16 p-16">
+            <p className="font-semibold py-4 p-">
               Choose your theme or setting
             </p>
-            <button className="options-btn ">
+            <button
+              className="options-btn "
+              onClick={() => selectOption(" A meadow outside the White House")}
+            >
               A meadow outside the White House
             </button>
-            <button className="options-btn">A medieval Kingdom</button>
-            <button className="options-btn">A haunted mansion</button>
-            <button className="options-btn">Ancient Egypt</button>
+            <button
+              className="options-btn"
+              onClick={() => selectOption("A medieval Kingdom")}
+            >
+              A medieval Kingdom
+            </button>
+            <button
+              className="options-btn"
+              onClick={() => selectOption(" A haunted mansion")}
+            >
+              A haunted mansion
+            </button>
+            <button
+              className="options-btn"
+              onClick={() => selectOption(" Ancient Egypt")}
+            >
+              Ancient Egypt
+            </button>
           </div>
         </div>
       )}
