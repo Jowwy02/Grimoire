@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const PROMPT = {
   role: "system",
   content:
-    "Create a very short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the theme chosen by the user.  The story should be structured into chapters. Each response from the model should be a new chapter. The chapters title should be a bold. The first chapter should have a title that carries the name of the story. The rest of the chapter should be structured with semantic tags to get a good readable structure. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner. The chapters shouldn't be cut abruptly, avoid this. After each chapter, suggest directions and paths that the story can go. The directions should be titled by paths.",
+    "Create a very short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the theme chosen by the user.  The story should be structured into chapters. Each response from the model should be a new chapter. The chapters title should be a bold. The first chapter should have a title that carries the name of the story. The rest of the chapter should be structured with semantic tags to get a good readable structure. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner. The chapters shouldn't be cut abruptly, avoid this. After each chapter, suggest directions that the story can go. The directions should be titled by paths.",
 };
 
 function App() {
@@ -56,6 +56,7 @@ function App() {
     setIsThinking(true);
     setMessages([...messages, { role: "user", content: input }]);
     console.log("messages", messages);
+    scrollToBottom();
     callOpenaiAPI([PROMPT, ...messages, { role: "user", content: input }]);
   };
 
@@ -116,7 +117,7 @@ function App() {
         <h6>Embark on an adventure of your choice...</h6>
       </div>
 
-      <div className="relative w-80 left-10 md:w-4/5  md:ml-40 my-5 md:min-h-[cal(100vh_-_150px)] pb-[170px]">
+      <div className="relative w-80 left-10 md:w-4/5 pb-[100px] md:ml-40 my-5 md:min-h-[cal(100vh_-_150px)] md:pb-[170px]">
         {messages.map((messages, i) => (
           <div
             ref={messagesEndRef}
@@ -132,13 +133,13 @@ function App() {
           </div>
         ))}
         {isThinking && (
-          <div class="flex items-center justify-center w-28 px-3 py-1 text-xs font-medium leading-none text-center rounded-full animate-bounce dark:bg-purple-700 ">
+          <div className="flex items-center justify-center w-28 px-3 py-1 text-xs font-medium leading-none text-center animate-bounce ">
             loading...
           </div>
         )}
       </div>
 
-      <div className="fixed w-80 left-10 bottom-0 md:w-4/5 md:left-32 md:right-52 md:p-8">
+      <div className="fixed w-80 left-10 bottom-0 md:w-4/5 md:left-32 md:right-52 md:p-8 md:pt-2 bg-white">
         <textarea
           placeholder="E.g “a haunted mansion”, “a spaceship bound for a new galaxy”,“a medieval kingdom” "
           value={input}
