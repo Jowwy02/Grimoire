@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const PROMPT = {
   role: "system",
   content:
-    "Create a short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the users input. The story should be structured into chapters. The chapters title should be bolded. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner.",
+    "Create a very short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the theme chosen by the user.  The story should be structured into chapters. Each response from the model should be a new chapter. The chapters title should be a bold. The first chapter should have a title that carries the name of the story. The rest of the chapter should be structured with semantic tags to get a good readable structure. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner. The chapters shouldn't be cut abruptly, avoid this. After each chapter, suggest directions and paths that the story can go. The directions should be titled by paths.",
 };
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
       const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo-0613",
         messages: chat,
-        max_tokens: 200,
+        max_tokens: 300,
         temperature: 0,
       });
 
@@ -56,14 +56,14 @@ function App() {
     setIsThinking(true);
     setMessages([...messages, { role: "user", content: input }]);
     console.log("messages", messages);
-    callOpenaiAPI([...messages, PROMPT]);
+    callOpenaiAPI([PROMPT, ...messages, { role: "user", content: input }]);
   };
 
   const selectOption = (option) => {
     // setInput(option)
     setIsThinking(true);
     setMessages([...messages, { role: "user", content: option }]);
-    callOpenaiAPI([...messages, PROMPT]);
+    callOpenaiAPI([PROMPT, ...messages, { role: "user", content: option }]);
   };
 
   const preloadSVG = (
@@ -93,7 +93,7 @@ function App() {
   };
 
   useEffect(() => {
-    input && callOpenaiAPI();
+    // input && callOpenaiAPI();
     scrollToBottom();
   }, [messages]);
 
@@ -105,24 +105,26 @@ function App() {
         </div>
         <div className="flex py-2">
           <img className="w-3" src={CommentInfo} alt="CommentInfo" />
-          <h6 className="text-sm mx-1 font-semibold">How it works?</h6>
+          <h6 className="text-sm font-medium md:text-sm mx-1 md:font-semibold">
+            How it works?
+          </h6>
         </div>
       </header>
       <div className="vertical-line"></div>
-      <div className="body mt-8 ml-40 pr-56">
+      <div className="body m-7  md:mt-8 md:ml-40 md:pr-56">
         <h1 className="font-bold text-2xl ">Welcome to your Grimoire,</h1>
         <h6>Embark on an adventure of your choice...</h6>
       </div>
 
-      <div className="relative mr-40 ml-44 space mx-auto my-5 min-h-[cal(100vh_-_150px)] pb-[170px]">
+      <div className="relative w-80 left-10 md:w-4/5  md:ml-40 my-5 md:min-h-[cal(100vh_-_150px)] pb-[170px]">
         {messages.map((messages, i) => (
           <div
             ref={messagesEndRef}
             key={i}
-            className={`  m-3 relative  p-3 max-w-3x rounded-lg  w-3/5 overflow-y-auto whitespace-normal text-black my-2  ${
+            className={`   relative p-3 md:max-w-2xl rounded-lg  md:w-3/5 md:right-10 overflow-y-auto whitespace-normal text-black my-2 mb-4 ${
               messages.role !== "assistant"
-                ? "bg-gray-300 "
-                : "bg-purple-200 ml-auto"
+                ? "bg-gray-300 md:ml-auto md:mr-16"
+                : "bg-purple-200 "
             }`}
             dangerouslySetInnerHTML={{ __html: messages.content || "" }}
           >
@@ -130,18 +132,18 @@ function App() {
           </div>
         ))}
         {isThinking && (
-          <div className="p-3 max-w-full text-white my-2 ml-auto">
-            {preloadSVG}
+          <div class="flex items-center justify-center w-28 px-3 py-1 text-xs font-medium leading-none text-center rounded-full animate-bounce dark:bg-purple-700 ">
+            loading...
           </div>
         )}
       </div>
 
-      <div className="fixed bottom-0  p-4 left-32 right-52 md:p-8">
+      <div className="fixed w-80 left-10 bottom-0 md:w-4/5 md:left-32 md:right-52 md:p-8">
         <textarea
           placeholder="E.g “a haunted mansion”, “a spaceship bound for a new galaxy”,“a medieval kingdom” "
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full border border-purple-700 p-2 rounded-lg"
+          className="w-full flex-grow  p-0.5  border border-purple-700 md:p-2 rounded-lg"
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.shiftKey === false) {
               e.preventDefault();
@@ -151,7 +153,7 @@ function App() {
         ></textarea>
         <button
           onClick={onSubmitAction}
-          className="bg-purple-700 text-white w-full  p-2 mt-2 rounded-lg hover:bg-purple-900 md:2xl "
+          className="bg-purple-700 text-white w-full mb-2 p-2 mt-2 rounded-lg hover:bg-purple-900 md:2xl "
         >
           Send
         </button>
@@ -159,9 +161,9 @@ function App() {
       {!messages.length && (
         <div
           className="absolute top-[200px]
-          transform-translate-x-1/2 pl-6 pr-6 left-32"
+          md:transform-translate-x-1/2 md:pl-6 md:pr-6 md:left-32"
         >
-          <p className="pt-8 pr-80">
+          <p className="mr-4 font-medium ml-7 md:pt-2 md:ml-2 md:pr-96">
             Please provide me with a theme or setting for your interactive
             fiction story. For instance, it could be something like "a haunted
             mansion," "a spaceship bound for a new galaxy," "a medieval
@@ -170,30 +172,31 @@ function App() {
             story.
           </p>
 
-          <div className="options ">
-            <p className="font-semibold py-4 p-">
-              Choose your theme or setting
-            </p>
+          <p className="font-semibold flex justify-end mr-6 pb-4 pt-8 md:mr-56">
+            Choose your theme or setting
+          </p>
+
+          <div className="options ml-20 p-0  md:mr-40 md:ml-[423px] ">
             <button
-              className="options-btn "
+              className="options-btn hover:bg-purple-600 p-0 md:m-1 md:p-1.5 rounded-lg "
               onClick={() => selectOption(" A meadow outside the White House")}
             >
               A meadow outside the White House
             </button>
             <button
-              className="options-btn"
+              className="options-btn hover:bg-purple-600 m-1 p-1.5 rounded-lg"
               onClick={() => selectOption("A medieval Kingdom")}
             >
               A medieval Kingdom
             </button>
             <button
-              className="options-btn"
+              className="options-btn m-1 hover:bg-purple-600 p-1.5 rounded-lg"
               onClick={() => selectOption(" A haunted mansion")}
             >
               A haunted mansion
             </button>
             <button
-              className="options-btn"
+              className="options-btn hover:bg-purple-600 m-1 p-1.5 rounded-lg"
               onClick={() => selectOption(" Ancient Egypt")}
             >
               Ancient Egypt

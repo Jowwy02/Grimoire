@@ -7,6 +7,7 @@ body{
   font-weight: 400;
   font-size: 16px;
   text-decoration-color: black;
+  
 }
 
 .vertical-line {
@@ -17,18 +18,15 @@ body{
 }
 
 .options{
-  margin-top: 70px;
- margin-left: 470px;
-}
-.options p {
-  margin-left: 300px;
+display: inline-flex;
+/* margin-left: 423px; */
 }
 
 .options-btn {
-  display: inline-flex;
   background-color: #dbdfe6;
-  margin: 6px;
-  padding: 6px;
-  border-radius: 8px;
+  /* margin: 4px;
+  padding: 6px; */
+  /* border-radius: 8px; */
   font-size: small;
 }
+
