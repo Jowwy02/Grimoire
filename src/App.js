@@ -12,7 +12,7 @@ const openai = new OpenAI({
 const PROMPT = {
   role: "system",
   content:
-    "Create a very short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the theme chosen by the user.  The story should be structured into chapters. Each response from the model should be a new chapter. The chapters title should be a bold. The first chapter should have a title that carries the name of the story. The rest of the chapter should be structured with semantic tags to get a good readable structure. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner. The chapters shouldn't be cut abruptly, avoid this. After each chapter, suggest directions that the story can go. The directions should be titled by paths.",
+    "Create a very short fictional story using HTML tag format without the <doctype> and <html> tags. The story should be based on the theme chosen by the user.  The story should be structured into chapters. Each response from the model should be a new chapter. The chapters title should be a bold. The first chapter should have a title that carries the name of the story. The rest of the chapter should be structured with semantic tags to get a good readable structure. It should return the first chapter only first, then when users raises a prompt, it should return the next chapter and so on in that manner. The chapters shouldn't be cut abruptly, avoid this. After each chapter, suggest directions that the story can go. The directions should be titled by paths and be bold.",
 };
 
 function App() {
