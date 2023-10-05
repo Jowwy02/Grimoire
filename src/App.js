@@ -173,11 +173,11 @@ function App() {
             story.
           </p>
 
-          <p className="font-semibold flex justify-end mr-6 pb-4 pt-8 md:mr-56">
+          <p className="font-semibold flex justify-end mr-10 pb-2 pt-8 md:mr-44">
             Choose your theme or setting
           </p>
 
-          <div className="options ml-20 p-0  md:mr-40 md:ml-[423px] ">
+          <div className="options flex justify-end mx-8 p-0 md:flex md:justify-end md:mr-[170px] md:ml-[423px] ">
             <button
               className="options-btn hover:bg-purple-600 p-0 md:m-1 md:p-1.5 rounded-lg "
               onClick={() => selectOption(" A meadow outside the White House")}

@@ -7,7 +7,7 @@ body{
   font-weight: 400;
   font-size: 16px;
   text-decoration-color: black;
-  
+
 }
 
 .vertical-line {
@@ -18,7 +18,7 @@ body{
 }
 
 .options{
-display: inline-flex;
+/* display: inline-flex */
 /* margin-left: 423px; */
 }
 
